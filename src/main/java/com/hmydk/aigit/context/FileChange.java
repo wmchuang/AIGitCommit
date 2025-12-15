@@ -1,5 +1,7 @@
 package com.hmydk.aigit.context;
 
+import com.hmydk.aigit.util.GitUtil;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vcs.changes.Change;
 import com.intellij.openapi.vcs.FilePath;
 import com.intellij.openapi.vcs.changes.ContentRevision;
@@ -44,16 +46,17 @@ public class FileChange {
      * 统一处理：从Git Change创建FileChange
      * 消除特殊情况，统一处理逻辑
      */
-    public static List<FileChange> fromGitChanges(List<Change> changes, List<FilePath> unversionedFiles) {
-        List<FileChange> result = new ArrayList<>();
-        
-        // 处理版本控制的文件
-        for (Change change : changes) {
-            FileChange fileChange = fromGitChange(change);
-            if (fileChange != null) {
-                result.add(fileChange);
-            }
-        }
+    public static List<FileChange> fromGitChanges(Project project, List<Change> changes, List<FilePath> unversionedFiles) {
+
+//        // 处理版本控制的文件
+//        for (Change change : changes) {
+//            FileChange fileChange = fromGitChange(change);
+//            if (fileChange != null) {
+//                result.add(fileChange);
+//            }
+//        }
+
+        List<FileChange> result = new ArrayList<>(GitUtil.computeDiffYl(changes, project));
         
         // 处理未版本控制的文件（统一处理，无特殊情况）
         for (FilePath filePath : unversionedFiles) {
@@ -66,7 +69,7 @@ public class FileChange {
         return result;
     }
     
-    private static FileChange fromGitChange(Change change) {
+    public static FileChange fromGitChange(Change change) {
         try {
             String path = getChangePath(change);
             if (path == null) return null;
@@ -130,7 +133,7 @@ public class FileChange {
         return null;
     }
     
-    private static FileChangeType determineChangeType(Change change) {
+    public static FileChangeType determineChangeType(Change change) {
         if (change.getBeforeRevision() == null) {
             return FileChangeType.ADDED;
         }
@@ -146,7 +149,7 @@ public class FileChange {
         return FileChangeType.MODIFIED;
     }
     
-    private static String extractExtension(String path) {
+    public static String extractExtension(String path) {
         int lastDot = path.lastIndexOf('.');
         if (lastDot > 0 && lastDot < path.length() - 1) {
             return path.substring(lastDot + 1).toLowerCase();
@@ -154,7 +157,7 @@ public class FileChange {
         return "";
     }
     
-    private static String determineLanguage(String path, String extension) {
+    public static String determineLanguage(String path, String extension) {
         // 基于扩展名确定语言
         switch (extension) {
             case "java": return "Java";

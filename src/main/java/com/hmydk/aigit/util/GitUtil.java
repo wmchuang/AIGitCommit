@@ -3,6 +3,7 @@ package com.hmydk.aigit.util;
 import com.hmydk.aigit.context.CommitContext;
 import com.hmydk.aigit.context.FileChange;
 import com.hmydk.aigit.config.ApiKeySettings;
+import com.hmydk.aigit.context.FileChangeType;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diff.impl.patch.FilePatch;
 import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder;
@@ -28,6 +29,8 @@ import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.hmydk.aigit.context.FileChange.extractExtension;
 
 /**
  * GItCommitUtil
@@ -435,6 +438,100 @@ public class GitUtil {
         return diffBuilder.toString();
     }
 
+
+    public static  List<FileChange> computeDiffYl(@NotNull List<Change> includedChanges, @NotNull Project project) {
+        GitRepositoryManager gitRepositoryManager = GitRepositoryManager.getInstance(project);
+        List<FileChange> result = new ArrayList<>();
+
+        // 过滤需要排除的文件
+        List<Change> filteredChanges = includedChanges.stream()
+                .filter(change -> {
+                    String filePath = getFilePathFromChange(change);
+                    return filePath == null || !shouldExcludeFile(filePath);
+                })
+                .collect(Collectors.toList());
+
+        // 按仓库分组处理变更
+        Map<GitRepository, List<Change>> changesByRepository = filteredChanges.stream()
+                .map(change -> {
+                    GitRepository repository = null;
+                    if (change.getVirtualFile() != null) {
+                        // 对于新增、修改、移动的文件，使用当前文件
+                        repository = gitRepositoryManager.getRepositoryForFileQuick(change.getVirtualFile());
+                    } else if (change.getBeforeRevision() != null && change.getBeforeRevision().getFile().getPath() != null) {
+                        // 对于删除的文件，使用删除前的文件路径
+                        repository = gitRepositoryManager.getRepositoryForFile(change.getBeforeRevision().getFile());
+                    }
+
+                    if (repository != null) {
+                        return new AbstractMap.SimpleEntry<>(repository, change);
+                    }
+                    return null;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(Map.Entry::getKey,
+                        Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
+
+        // 处理每个仓库的变更
+        for (Map.Entry<GitRepository, List<Change>> entry : changesByRepository.entrySet()) {
+            GitRepository repository = entry.getKey();
+            List<Change> changes = entry.getValue();
+
+            if (repository != null) {
+                try {
+                    // 构建文件补丁
+                    List<FilePatch> filePatches = IdeaTextPatchBuilder.buildPatch(
+                            project,
+                            changes,
+                            repository.getRoot().toNioPath(),
+                            false,
+                            true);
+
+                    // 添加仓库信息
+//                    diffBuilder.append("Repository: ").append(repository.getRoot().getName()).append("\n\n");
+
+                    // 处理每个文件的变更
+                    for (FilePatch patch : filePatches) {
+                        String filePath = patch.getBeforeName();
+                        FileChangeType fileChangeType = FileChange.determineChangeType(changes.get(0));
+                        String extension = FileChange.extractExtension(filePath);
+                        String language = FileChange.determineLanguage(filePath, extension);
+
+
+                        // 使用StringWriter获取差异内容
+                        StringWriter stringWriter = new StringWriter();
+                        UnifiedDiffWriter.write(project, List.of(patch), stringWriter, "\n", null);
+                        String diffContent = stringWriter.toString();
+
+                        FileChange fileChange = new FileChange(filePath, fileChangeType, language, null,
+                                0, 0, diffContent, null);
+                        result.add(fileChange);
+                    }
+                } catch (Exception e) {
+                    log.error("Error computing diff", e);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private static FileChangeType determineChangeType(Change change) {
+        if (change.getBeforeRevision() == null) {
+            return FileChangeType.ADDED;
+        }
+        if (change.getAfterRevision() == null) {
+            return FileChangeType.DELETED;
+        }
+        // 检查是否是移动
+        String beforePath = change.getBeforeRevision().getFile().getPath();
+        String afterPath = change.getAfterRevision().getFile().getPath();
+        if (!beforePath.equals(afterPath)) {
+            return FileChangeType.MOVED;
+        }
+        return FileChangeType.MODIFIED;
+    }
+
     private static String getChangeType(List<Change> changes, String filePath) {
         for (Change change : changes) {
             return switch (change.getType()) {
@@ -482,7 +579,7 @@ public class GitUtil {
         }
         
         // 统一处理所有文件变更，消除特殊情况
-        List<FileChange> changes = FileChange.fromGitChanges(filteredChanges, filteredUnversionedFiles);
+        List<FileChange> changes = FileChange.fromGitChanges(project, filteredChanges, filteredUnversionedFiles);
         
         // 创建CommitContext - 一个数据结构包含所有信息
         return CommitContext.create(project, changes);

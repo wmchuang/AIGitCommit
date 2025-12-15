@@ -1,21 +1,26 @@
-<svg width="18" height="18" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#3498db;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#2ecc71;stop-opacity:1" />
-        </linearGradient>
-    </defs>
-
-    <!-- 背景 -->
-    <rect x="0" y="0" width="100" height="100" rx="20" ry="20" fill="url(#grad)" />
-
-    <!-- 字母 A，同时暗示 Git 分支 -->
-    <path d="M25 75 L50 25 L75 75" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
-    <line x1="37.5" y1="50" x2="62.5" y2="50" stroke="white" stroke-width="8" stroke-linecap="round" />
-
-    <!-- 字母 I，同时作为 Git 主干 -->
-    <line x1="50" y1="25" x2="50" y2="75" stroke="white" stroke-width="8" stroke-linecap="round" />
-
-    <!-- 代表消息的圆点 -->
-    <circle cx="50" cy="75" r="6" fill="white" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">  <image id="image0" width="16" height="16" x="0" y="0"
+    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAIGNIUk0AAHomAACAhAAA+gAAAIDo
+AAB1MAAA6mAAADqYAAAXcJy6UTwAAAJ8UExURfonLfooLvxiYPxjX/xiXvoqL/1hXPxGQ/5bUPxG
+Q/5YS/xGQ/xHQ/5aTf5YS/oqL/orMPstMPsuMfswMvsxM/szNPs0Nfs2Nvw3Nvw/PvxbWfopL/or
+L/ssMPs2Nfw6OfxRT/xfXfxhXvsrL/ssL/s2OPtHSfs4Ofs1Nfw2Nfw1NPxFQ/xlY/xiX/xfXPxN
+UP2Vlv7Fxv7T0/xXV/s+Pfw9PPxHRv1+fP2mpf2PjfxjX/1eWv1fW/xSVP7e3//////r6/xlZfxO
+TfxPTvxhX/65uP2LiPxcWP1bV/1dWP1eWfswM/s8PvtPUf7V1f/p6fxzcv6pqf6xsPxkYv19e/2e
+nP10cP1cV/1cVv1dV/s/QftSU/7W1v/m5v2ko//8/P2dm/16d/6qp/2Bfv1zb/1cVftGSPtHSP7X
+1/2Mi//o6P/v7v2Fgv2Oi/2Kh/1xbP6Zlf1fWP1bU/tHR/xSUv7Y2P/n5vxiYPxraP1vbP6QjP6z
+sP6fm/1hWv1aUvtGR/xTUv7Z2fxkYfxPS/1TT/6TkP6Niv6+vP/j4v15c/1kXP5dVPtGRv7a2f/5
++f7T0f7FxP7KyP/f3v/29v/7+/6koP1iWv5kW/5fVfxGRfxUUf7b2v/29f6rp/1hWf5gV/5iWfxH
+RfxRTv69vP/q6v/y8v/19f/y8f/k4/7Bvv6Dff1YT/5XTv5cU/5gVv5eU/xHRPxJRfxTT/1hXf1u
+af1zbv1vaf1iXP1VTf1SSf5VTP5XTf5ZTv5cUfxIRP1JRf1KRP1LRf1MRf1ORv1QSP1TSv5US/5W
+TP5ZTf5aTv1JRP1KRf1MRv1NR/1OR/1RSf5TSv5USv5WS/5XTOoB+bAAAAAPdFJOU13g4F3g/v7+
+/uDgXeDgXRpG1LQAAAABYktHRD8+YzB1AAAAB3RJTUUH6QwPASQ7IS1/CAAAARtJREFUGNMBEAHv
+/gAAAQ8QERITFBUWFxgZGgIDAAEbHB0SEhQVFh4YHyAhIgQABRwjJCUmJxUoKSorLC0uBgAQJC8w
+MTIzNDU2Nzg5Ojs8AB0RPT4/QEFCQ0RFRkdISUoAS0xNTj9PUFFSU1RVVldYWQBaJltcP11eXz9g
+YWJjZFllAGZnW2g/XWlqa2xtbm9wcXIAc3N0dT92d3h5PGN6e3x9fgB/c4CBP3aCg4SFhoeIiYqL
+AIw2gI0/jo+QkZKTlJWWl5gAmZmamz8/Pz8/P5ydnp+gmACZoaKjpKWmp6ipqqusra6vAAewsbKz
+tLW2t7i5uru8vQgACbC+v8DBwsPExcbHu8jJCgALDMrLzM3OxM/Q0dLTyA0OEaxkSsyB1e4AAAAl
+dEVYdGRhdGU6Y3JlYXRlADIwMjUtMTItMTVUMDE6MzY6NTgrMDA6MDCZXDUQAAAAJXRFWHRkYXRl
+Om1vZGlmeQAyMDI1LTEyLTE1VDAxOjM2OjU5KzAwOjAwTnaGGAAAACh0RVh0ZGF0ZTp0aW1lc3Rh
+bXAAMjAyNS0xMi0xNVQwMTozNjo1OSswMDowMBljp8cAAAAASUVORK5CYII=" />
 </svg>

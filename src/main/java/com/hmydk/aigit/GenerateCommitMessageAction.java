@@ -124,7 +124,7 @@ public class GenerateCommitMessageAction extends AnAction {
             @Override
             public void run(@NotNull ProgressIndicator indicator) {
                 try {
-                    String diff = GitUtil.getOptimizedAIInput(includedChanges, includedUnversionedFiles, project);
+                    String diff = GitUtil.getFormattedDiff(includedChanges, includedUnversionedFiles, project);
 //                    System.out.println(diff);
                     if (commitMessageService.generateByStream()) {
                         messageBuilder.setLength(0);
