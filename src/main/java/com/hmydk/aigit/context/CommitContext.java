@@ -74,7 +74,7 @@ public class CommitContext {
         StringBuilder sb = new StringBuilder();
         sb.append("项目信息:\n");
         sb.append("- 项目名称: ").append(project.getName()).append("\n");
-        sb.append("- 当前分支: ").append(project.getBranch()).append("\n\n");
+        sb.append("- 当前分支: ").append(project.getBranch()).append("\n");
         sb.append("- 提交人: ").append(project.getAuth()).append("\n\n");
 
 

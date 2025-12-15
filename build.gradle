@@ -3,8 +3,8 @@ plugins {
     id("org.jetbrains.intellij") version "1.17.3"
 }
 
-group = "com.hmydk"
-version = "2.1.2"
+group = "com.youlu"
+version = "2.1.3"
 
 repositories {
     mavenCentral()
@@ -19,7 +19,7 @@ intellij {
     plugins = ["Git4Idea", "java"]
 }
 
-patchPluginXml.sinceBuild.set("241.0")
+patchPluginXml.sinceBuild.set("230.0")
 patchPluginXml.untilBuild.set("253.*")
 
 tasks.withType(JavaCompile).configureEach {
